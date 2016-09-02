@@ -1,5 +1,7 @@
 Tiny Absolute Path Library
 ==========================
+[![Build Status](https://travis-ci.org/rhysd/abspath.svg?branch=master)](https://travis-ci.org/rhysd/abspath)
+[![Build status](https://ci.appveyor.com/api/projects/status/usfx6p4xff31sn7e/branch/master?svg=true)](https://ci.appveyor.com/project/rhysd/abspath/branch/master)
 
 `abspath` is a tiny library to handle file paths a bit better.
 
