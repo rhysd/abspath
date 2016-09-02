@@ -15,5 +15,6 @@ else
     go test -v -coverprofile=coverage.out
     set +e
     $HOME/gopath/bin/goveralls -coverprofile coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+    exit 0
 fi
 
