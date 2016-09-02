@@ -29,7 +29,7 @@ when we see this API, we can know the `path` parameter is an absolute path, not 
 
 ```go
 // Error with ''
-writeSomethingTo("relative_path") error
+writeSomethingTo("relative_path")
 ```
 
 In addition, `AbsPath` is kept clean.
