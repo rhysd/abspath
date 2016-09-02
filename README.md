@@ -85,3 +85,8 @@ file.WriteString(string(a))  // 'a' as a string
 ```
 
 Vice versa, `string` can be converted to `AbsPath`.  We can't prevent it because golang permits the conversion.  So all we can do is prohibiting it.  We MUST use factory functions described above to create an `AbsPath` instance.
+
+
+## License
+
+Distributed under [Public Domain 1.0](https://creativecommons.org/publicdomain/mark/1.0/)
