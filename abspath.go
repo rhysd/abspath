@@ -2,6 +2,7 @@ package abspath
 
 import (
 	"fmt"
+	"os/user"
 	"path/filepath"
 )
 
@@ -19,7 +20,7 @@ func New(from string) (AbsPath, error) {
 	if !filepath.IsAbs(from) {
 		return AbsPath(""), &NotAbsolutePathError{from}
 	}
-	return AbsPath(from), nil
+	return AbsPath(filepath.Clean(from)), nil
 }
 
 func ExpandFrom(maybe_relative string) (AbsPath, error) {
@@ -36,10 +37,10 @@ func ExpandFrom(maybe_relative string) (AbsPath, error) {
 		if err != nil {
 			return AbsPath(""), err
 		}
-		return AbsPath(filepath.Join(u.HomeDir, s[1:])), nil
+		return AbsPath(filepath.Join(u.HomeDir, maybe_relative[1:])), nil
 	}
 
-	p, err := filepath.Abs()
+	p, err := filepath.Abs(maybe_relative)
 	if err != nil {
 		return AbsPath(""), err
 	}
@@ -51,11 +52,11 @@ func FromSlash(s string) (AbsPath, error) {
 }
 
 func (a AbsPath) Base(path AbsPath) AbsPath {
-	return AbsPath(filepath.Base(string(AbsPath)))
+	return AbsPath(filepath.Base(string(a)))
 }
 
 func (a AbsPath) Dir(path AbsPath) AbsPath {
-	return AbsPath(filepath.Dir(string(AbsPath)))
+	return AbsPath(filepath.Dir(string(a)))
 }
 
 func (a AbsPath) EvalSymlinks(path AbsPath) (AbsPath, error) {
@@ -63,30 +64,26 @@ func (a AbsPath) EvalSymlinks(path AbsPath) (AbsPath, error) {
 	if err != nil {
 		return AbsPath(""), err
 	}
-	a, err := filepath.Abs(s)
+	s, err = filepath.Abs(s)
 	if err != nil {
 		return AbsPath(""), err
 	}
-	return AbsPath(a), nil
+	return AbsPath(s), nil
 }
 
 func (a AbsPath) Ext(path AbsPath) string {
 	return filepath.Ext(string(path))
 }
 
-func (a AbsPath) HasPrefix(prefix AbsPath) bool {
-	return filepath.HasPrefix(string(a), prefix)
-}
-
 func (a AbsPath) Join(elem ...string) AbsPath {
-	return absoltuePath(filepath.Join(string(a), elem...))
+	return AbsPath(filepath.Join(string(a), filepath.Join(elem...)))
 }
 
 func (a AbsPath) Match(pattern string) (bool, error) {
 	return filepath.Match(pattern, string(a))
 }
 
-func (a AbsPath) Rel(targpath string) (AbsPath, error) {
+func (a AbsPath) Rel(targpath string) (string, error) {
 	return filepath.Rel(string(a), targpath)
 }
 

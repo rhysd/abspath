@@ -29,6 +29,8 @@ when we see this API, we can know the `path` parameter is an absolute path, not 
 writeSomethingTo("relative_path") error
 ```
 
+In addition, `AbsPath` is kept clean.
+
 ## Installation
 
 ```sh
