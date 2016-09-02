@@ -51,16 +51,16 @@ func FromSlash(s string) (AbsPath, error) {
 	return New(filepath.FromSlash(s))
 }
 
-func (a AbsPath) Base(path AbsPath) AbsPath {
+func (a AbsPath) Base() AbsPath {
 	return AbsPath(filepath.Base(string(a)))
 }
 
-func (a AbsPath) Dir(path AbsPath) AbsPath {
+func (a AbsPath) Dir() AbsPath {
 	return AbsPath(filepath.Dir(string(a)))
 }
 
-func (a AbsPath) EvalSymlinks(path AbsPath) (AbsPath, error) {
-	s, err := filepath.EvalSymlinks(string(path))
+func (a AbsPath) EvalSymlinks() (AbsPath, error) {
+	s, err := filepath.EvalSymlinks(string(a))
 	if err != nil {
 		return AbsPath(""), err
 	}
@@ -71,8 +71,8 @@ func (a AbsPath) EvalSymlinks(path AbsPath) (AbsPath, error) {
 	return AbsPath(s), nil
 }
 
-func (a AbsPath) Ext(path AbsPath) string {
-	return filepath.Ext(string(path))
+func (a AbsPath) Ext() string {
+	return filepath.Ext(string(a))
 }
 
 func (a AbsPath) Join(elem ...string) AbsPath {
