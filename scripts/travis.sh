@@ -13,8 +13,9 @@ else
     if ! go get code.google.com/p/go.tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
     go get -t -d -v ./...
     go test -v -coverprofile=coverage.out
+    result=$?
     set +e
     $HOME/gopath/bin/goveralls -coverprofile coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
-    exit 0
+    exit $result
 fi
 
