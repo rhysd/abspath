@@ -2,6 +2,7 @@ package abspath
 
 import (
 	"fmt"
+	"os"
 	"os/user"
 	"path/filepath"
 )
@@ -178,4 +179,28 @@ func (a AbsPath) Walk(walkFn filepath.WalkFunc) error {
 //	file.WriteString(a.String())
 func (a AbsPath) String() string {
 	return a.underlying
+}
+
+// Returns true if the absolute path entry exists.
+func (a AbsPath) Exists() bool {
+	_, err := os.Stat(a.underlying)
+	return err == nil
+}
+
+// Returns true if the absolute path entry exists and is a directory.
+func (a AbsPath) IsDir() bool {
+	s, err := os.Stat(a.underlying)
+	if err != nil {
+		return false
+	}
+	return s.IsDir()
+}
+
+// Returns true if the absolute path entry exists and is a file.
+func (a AbsPath) IsFile() bool {
+	s, err := os.Stat(a.underlying)
+	if err != nil {
+		return false
+	}
+	return !s.IsDir()
 }
