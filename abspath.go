@@ -75,6 +75,16 @@ func FromSlash(s string) (AbsPath, error) {
 	return New(filepath.FromSlash(s))
 }
 
+// Create `AbsPath` from slash separated string.  The same as `ExpandFrom()`, '~' is interpreted as a home directory
+// and relative path will be joined with a path to current directory.
+//
+// Example:
+//	// On Windows: e.g. Expanded to 'D:\path\to\cwd\relative\path'
+//	a, err := ExpandFromSlash("relative/path")
+func ExpandFromSlash(s string) (AbsPath, error) {
+	return ExpandFrom(filepath.FromSlash(s))
+}
+
 // Equivalent to `filepath.Base()`.
 //
 // Ref: https://golang.org/pkg/path/filepath/#Base
