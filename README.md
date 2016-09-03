@@ -12,14 +12,15 @@ However, treating file paths with `string` has some problems.  We always go wron
 When we create an API which takes a file path, we always need to take care about the parameter (It takes relative path? absolute path? or both of them?).
 Or we need to design and implement the API to take both the absolute path and relative path.
 
-I don't want to write a program caring about that throughout a program.  So I created a type to represent an absolute path.  It's just an strong type alias of `string`.
+I don't want to write a program caring about that throughout a program.  So I created a type to represent an absolute path.  It's just a wrapper of `string`.
 
 ```go
-type AbsPath string
+type AbsPath struct {
+    underlying string
+}
 ```
 
-It's further obvious because its type name is descriptive.  It's just an alias, so runtime overhead doesn't exist, I believe.
-And it can't be relative path. For example,
+It's further obvious because its type name is descriptive.  And it can't be relative path. For example,
 
 ```go
 func writeSomethingTo(path AbsPath) error
@@ -28,7 +29,7 @@ func writeSomethingTo(path AbsPath) error
 when we see this API, we can know the `path` parameter is an absolute path, not a relative path.  And we can't fail to pass a relative path to above API because it never accept relative paths.
 
 ```go
-// Error with ''
+// Error with 'cannot use a (type AbsPath) as type string in argument'
 writeSomethingTo("relative_path")
 ```
 
@@ -82,14 +83,12 @@ All methods are non-destructive because `AbsPath` is a type alias of `string` an
 
 ### Convert to `string`
 
-You can simply convert to `string` by `string()` conversion.
+You can simply convert to `string` by `.String()` method.
 
 ```go
 a, _ = abspath.New("/absolute/path")
-file.WriteString(string(a))  // 'a' as a string
+file.WriteString(a.String())  // 'a' as a string
 ```
-
-Vice versa, `string` can be converted to `AbsPath`.  We can't prevent it because golang permits the conversion.  So all we can do is prohibiting it.  We MUST use factory functions described above to create an `AbsPath` instance.
 
 
 ## License
