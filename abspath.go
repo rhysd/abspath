@@ -6,7 +6,9 @@ import (
 	"path/filepath"
 )
 
-type AbsPath string
+type AbsPath struct {
+	underlying string
+}
 
 type NotAbsolutePathError struct {
 	specified string
@@ -18,33 +20,33 @@ func (err *NotAbsolutePathError) Error() string {
 
 func New(from string) (AbsPath, error) {
 	if !filepath.IsAbs(from) {
-		return AbsPath(""), &NotAbsolutePathError{from}
+		return AbsPath{""}, &NotAbsolutePathError{from}
 	}
-	return AbsPath(filepath.Clean(from)), nil
+	return AbsPath{filepath.Clean(from)}, nil
 }
 
 func ExpandFrom(maybe_relative string) (AbsPath, error) {
 	if filepath.IsAbs(maybe_relative) {
-		return AbsPath(filepath.Clean(maybe_relative)), nil
+		return AbsPath{filepath.Clean(maybe_relative)}, nil
 	}
 
 	if maybe_relative == "" {
-		return AbsPath(""), fmt.Errorf("Empty path cannot be expanded")
+		return AbsPath{""}, fmt.Errorf("Empty path cannot be expanded")
 	}
 
 	if maybe_relative[0] == '~' {
 		u, err := user.Current()
 		if err != nil {
-			return AbsPath(""), err
+			return AbsPath{""}, err
 		}
-		return AbsPath(filepath.Join(u.HomeDir, maybe_relative[1:])), nil
+		return AbsPath{filepath.Join(u.HomeDir, maybe_relative[1:])}, nil
 	}
 
 	p, err := filepath.Abs(maybe_relative)
 	if err != nil {
-		return AbsPath(""), err
+		return AbsPath{""}, err
 	}
-	return AbsPath(p), nil
+	return AbsPath{p}, nil
 }
 
 func FromSlash(s string) (AbsPath, error) {
@@ -52,54 +54,58 @@ func FromSlash(s string) (AbsPath, error) {
 }
 
 func (a AbsPath) Base() AbsPath {
-	return AbsPath(filepath.Base(string(a)))
+	return AbsPath{filepath.Base(a.underlying)}
 }
 
 func (a AbsPath) Dir() AbsPath {
-	return AbsPath(filepath.Dir(string(a)))
+	return AbsPath{filepath.Dir(a.underlying)}
 }
 
 func (a AbsPath) EvalSymlinks() (AbsPath, error) {
-	s, err := filepath.EvalSymlinks(string(a))
+	s, err := filepath.EvalSymlinks(a.underlying)
 	if err != nil {
-		return AbsPath(""), err
+		return AbsPath{""}, err
 	}
 	s, err = filepath.Abs(s)
 	if err != nil {
-		return AbsPath(""), err
+		return AbsPath{""}, err
 	}
-	return AbsPath(s), nil
+	return AbsPath{s}, nil
 }
 
 func (a AbsPath) Ext() string {
-	return filepath.Ext(string(a))
+	return filepath.Ext(a.underlying)
 }
 
 func (a AbsPath) Join(elem ...string) AbsPath {
-	return AbsPath(filepath.Join(string(a), filepath.Join(elem...)))
+	return AbsPath{filepath.Join(a.underlying, filepath.Join(elem...))}
 }
 
 func (a AbsPath) Match(pattern string) (bool, error) {
-	return filepath.Match(pattern, string(a))
+	return filepath.Match(pattern, a.underlying)
 }
 
 func (a AbsPath) Rel(targpath string) (string, error) {
-	return filepath.Rel(string(a), targpath)
+	return filepath.Rel(a.underlying, targpath)
 }
 
 func (a AbsPath) Split() (dir AbsPath, file string) {
-	d, f := filepath.Split(string(a))
-	return AbsPath(d), f
+	d, f := filepath.Split(a.underlying)
+	return AbsPath{d}, f
 }
 
 func (a AbsPath) ToSlash() string {
-	return filepath.ToSlash(string(a))
+	return filepath.ToSlash(a.underlying)
 }
 
 func (a AbsPath) VolumeName() string {
-	return filepath.VolumeName(string(a))
+	return filepath.VolumeName(a.underlying)
 }
 
 func (a AbsPath) Walk(walkFn filepath.WalkFunc) error {
-	return filepath.Walk(string(a), walkFn)
+	return filepath.Walk(a.underlying, walkFn)
+}
+
+func (a AbsPath) String() string {
+	return a.underlying
 }

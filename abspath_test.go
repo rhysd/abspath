@@ -22,7 +22,7 @@ func TestNew(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		if string(a) != c.expected {
+		if a.String() != c.expected {
 			t.Errorf("Expected %s but actually %s", c.expected, a)
 		}
 	}
@@ -69,7 +69,7 @@ func TestExpandFrom(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		if string(a) != c.expected {
+		if a.String() != c.expected {
 			t.Errorf("Expected %s but actually %s", c.expected, a)
 		}
 	}
@@ -96,7 +96,7 @@ func TestFromSlash(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		if string(a) != c.expected {
+		if a.String() != c.expected {
 			t.Errorf("Expected %s but actually %s", c.expected, a)
 		}
 	}
@@ -119,7 +119,7 @@ func TestFromSlash(t *testing.T) {
 func TestBase(t *testing.T) {
 	a, _ := New("/foo/bar.poyo")
 	b := a.Base()
-	actual := string(b)
+	actual := b.String()
 	expected := filepath.Base("/foo/bar.poyo")
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
@@ -129,7 +129,7 @@ func TestBase(t *testing.T) {
 func TestDir(t *testing.T) {
 	a, _ := New("/foo/bar")
 	b := a.Dir()
-	actual := string(b)
+	actual := b.String()
 	expected := filepath.Dir("/foo/bar")
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
@@ -142,7 +142,7 @@ func TestEvalSymlinks(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	actual := string(b)
+	actual := b.String()
 	expected, _ := filepath.Abs("testdata/test-file")
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
@@ -168,7 +168,7 @@ func TestExt(t *testing.T) {
 func TestJoin(t *testing.T) {
 	a, _ := New("/foo/bar")
 	b := a.Join("tsurai", "darui")
-	actual := string(b)
+	actual := b.String()
 	expected := filepath.Join("/foo/bar", "tsurai", "darui")
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
@@ -202,7 +202,7 @@ func TestSplit(t *testing.T) {
 	a, _ := New("/foo/bar.poyo")
 	d, f := a.Split()
 	d2, f2 := filepath.Split("/foo/bar.poyo")
-	if string(d) != d2 {
+	if d.String() != d2 {
 		t.Errorf("Expected %s but actually %s", d2, d)
 	}
 	if f != f2 {
