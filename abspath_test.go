@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -39,6 +40,9 @@ func TestNew(t *testing.T) {
 		_, err := New(e)
 		if err == nil {
 			t.Errorf("Error was expected for input '%s'", e)
+		}
+		if !strings.HasPrefix(err.Error(), "Not an absolute path: ") {
+			t.Errorf("Unexpected kind of error: %s", err.Error())
 		}
 	}
 }
@@ -330,6 +334,20 @@ func TestIsFile(t *testing.T) {
 	c, _ := ExpandFrom("_test_dir")
 	if c.IsFile() {
 		t.Errorf("Existing directory was not found as file")
+	}
+}
+
+func TestEquals(t *testing.T) {
+	a, _ := FromSlash("/foo/bar")
+	b, _ := FromSlash("/foo/bar")
+	if a != b {
+		t.Errorf("Expected '%s' == '%s'", a, b)
+	}
+
+	c, _ := FromSlash("/foo/bar")
+	d, _ := FromSlash("/piyo/poyo")
+	if c == d {
+		t.Errorf("Expected '%s' != '%s'", c, d)
 	}
 }
 
