@@ -332,3 +332,54 @@ func TestIsFile(t *testing.T) {
 		t.Errorf("Existing directory was not found as file")
 	}
 }
+
+func funcPassByValue(a AbsPath) string {
+	return a.String()
+}
+
+func funcPassByRef(a *AbsPath) string {
+	return a.String()
+}
+
+func BenchmarkPassBy(b *testing.B) {
+	a, _ := FromSlash("/path/to/entry")
+
+	b.Run("Pass by value", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			funcPassByValue(a)
+		}
+	})
+
+	b.Run("Pass by reference", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			funcPassByRef(&a)
+		}
+	})
+}
+
+func funcRawBase(a *AbsPath) string {
+	return filepath.Base(a.String())
+}
+
+func BenchmarkBaseMethod(b *testing.B) {
+	a, _ := FromSlash("/path/to/entry")
+	s := "/path/to/entry"
+
+	b.Run("Fastest raw Base() function", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			filepath.Base(s)
+		}
+	})
+
+	b.Run("Equivalent Base() function", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			funcRawBase(&a)
+		}
+	})
+
+	b.Run("Original Base() method", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			a.Base()
+		}
+	})
+}
