@@ -65,22 +65,35 @@ a, err = abspath.ExpandFrom("~/relative_path")
 // Slashes in the string will be replaced by a file separator.
 // In Windows, below can be 'C:\absolute\path'
 a, err = abspath.FromSlash("/absoltue/path")
+
+// Similar to ExpandFrom().  But all slashes will be replaced with a file sperator.
+a, err = abspath.ExpandFromSlash("relative/path")
 ```
 
 ### Operate The Path
 
-`AbsPath` has some methods deriving function defined in [`path/filepath`](https://golang.org/pkg/path/filepath) standard library.  They are helper to avoid converting between `AbsPath` and `string` frequently when you want to use functions in `path/filepath` package.
+`AbsPath` has some methods deriving function defined in [`path/filepath`](https://golang.org/pkg/path/filepath) standard library.  They are helpers to avoid converting between `AbsPath` and `string` frequently when you want to use functions in `path/filepath` package. All method are non-destructive.
 
 For example:
 
 ```go
-a, _ = abspath.New("/absolute/path")
+a, _ := abspath.New("/absolute/path")
 fmt.Printf("%s\n", a.Dir())
 fmt.Printf("%s\n", a.Base())
 fmt.Printf("%s\n", a.HasPrefix("/absolute"))
 ```
 
-All methods are non-destructive because `AbsPath` is a type alias of `string` and strings in golang are immutable.
+In addition, there is a helper to check the path exists.
+
+```go
+a, _ := abspath.ExpandFrom("some_file")
+
+a.Exists()  // true
+a.IsFile()  // true
+a.IsDir()   // false
+```
+
+Please see [GoDoc](https://godoc.org/github.com/rhysd/abspath) for full documentation.
 
 ### Convert to `string`
 
