@@ -3,6 +3,7 @@ Tiny Absolute Path Library
 [![Build Status](https://travis-ci.org/rhysd/abspath.svg?branch=master)](https://travis-ci.org/rhysd/abspath)
 [![Build status](https://ci.appveyor.com/api/projects/status/usfx6p4xff31sn7e/branch/master?svg=true)](https://ci.appveyor.com/project/rhysd/abspath/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/rhysd/abspath/badge.svg?branch=master)](https://coveralls.io/github/rhysd/abspath?branch=master)
+[![GoDoc](https://godoc.org/github.com/rhysd/abspath?status.svg)](https://godoc.org/github.com/rhysd/abspath)
 
 `abspath` is a tiny library to handle file paths a bit better.
 
