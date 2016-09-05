@@ -204,3 +204,15 @@ func (a AbsPath) IsFile() bool {
 	}
 	return !s.IsDir()
 }
+
+// Returns `FileInfo` of the path.  Equivalent to `os.Stat()`.
+// Example:
+//	a, _ := abspath.New("/path/to/file")
+//	s, err := a.Stat()
+//	if err != nil {
+//		panic(err)
+//	}
+//	fmt.Printf("Mode=%v\n", s.Mode())
+func (a AbsPath) Stat() (os.FileInfo, error) {
+	return os.Stat(a.underlying)
+}

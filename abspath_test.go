@@ -351,6 +351,23 @@ func TestEquals(t *testing.T) {
 	}
 }
 
+func TestStat(t *testing.T) {
+	f, err := os.OpenFile("_test_file", os.O_CREATE|os.O_RDWR, 0644)
+	if err != nil {
+		panic(err)
+	}
+	f.Close()
+	defer os.Remove("_test_file")
+	a, _ := ExpandFrom("_test_file")
+	s, err := a.Stat()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.IsDir() {
+		t.Errorf("_test_file is not an directory")
+	}
+}
+
 func funcPassByValue(a AbsPath) string {
 	return a.String()
 }
