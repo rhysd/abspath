@@ -1,6 +1,7 @@
 package abspath
 
 import (
+	"fmt"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -417,4 +418,46 @@ func BenchmarkBaseMethod(b *testing.B) {
 			a.Base()
 		}
 	})
+}
+
+func Example(t *testing.T) {
+	var a AbsPath
+	var err error
+
+	// From a string representing absolute path.
+	// If it doesn't stand for absolute path, an error will be returned.
+	a, err = New("/absolute/path")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(a.String())
+
+	// Expanded to $PWD/relative_path
+	a, err = ExpandFrom("relative_path")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(a.String())
+
+	// Expanded to $HOME/relative_path
+	a, err = ExpandFrom("~/relative_path")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(a.String())
+
+	// Slashes in the string will be replaced by a file separator.
+	// In Windows, below can be 'C:\absolute\path'
+	a, err = FromSlash("/absoltue/path")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(a.String())
+
+	// Similar to ExpandFrom().  But all slashes will be replaced with a file sperator.
+	a, err = ExpandFromSlash("relative/path")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(a.String())
 }

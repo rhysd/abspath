@@ -50,7 +50,7 @@ $ go get github.com/rhysd/abspath
 import github.com/rhysd/abspath
 
 var a abspath.AbsPath
-var e error
+var err error
 
 // From a string representing absolute path.
 // If it doesn't stand for absolute path, an error will be returned.
