@@ -394,7 +394,7 @@ func BenchmarkPassBy(b *testing.B) {
 }
 
 func funcRawBase(a *AbsPath) string {
-	return filepath.Base(a.String())
+	return filepath.Base(a.underlying)
 }
 
 func BenchmarkBaseMethod(b *testing.B) {
@@ -406,6 +406,29 @@ func BenchmarkBaseMethod(b *testing.B) {
 			filepath.Base(s)
 		}
 	})
+
+	b.Run("Equivalent Base() function", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			funcRawBase(&a)
+		}
+	})
+
+	b.Run("Original Base() method", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			a.Base()
+		}
+	})
+}
+
+func BenchmarkLongPath(b *testing.B) {
+	p := ""
+	for i := 0; i < 10; i++ {
+		for c := 'a'; c <= 'z'; c++ {
+			p += fmt.Sprintf("/%c%c%c_%c%c%c", c, c, c, c, c, c)
+		}
+	}
+	s := filepath.FromSlash(p)
+	a, _ := New(s)
 
 	b.Run("Equivalent Base() function", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
