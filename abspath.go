@@ -86,6 +86,21 @@ func ExpandFromSlash(s string) (AbsPath, error) {
 	return ExpandFrom(filepath.FromSlash(s))
 }
 
+// Create `AbsPath` for the working directory.  This is similar to `os.Getwd()` but returns `AbsPath` instead of string.
+//
+// Example:
+//	cwd, err := os.Getwd()
+//	if err != nil {
+//		panic(err)
+//	}
+func Getwd() (AbsPath, error) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return AbsPath{""}, nil
+	}
+	return New(cwd)
+}
+
 // Equivalent to `filepath.Base()`.
 //
 // Ref: https://golang.org/pkg/path/filepath/#Base

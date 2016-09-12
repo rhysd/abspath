@@ -137,6 +137,21 @@ func TestExpandFromSlash(t *testing.T) {
 	}
 }
 
+func TestGetwd(t *testing.T) {
+	expected, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
+	actual, err := Getwd()
+	if err != nil {
+		t.Fatalf("Getwd() unexpectedly returns an error although os.Getwd() doesn't return an error: %s", err.Error())
+	}
+	if actual.String() != expected {
+		t.Fatalf("Expected Getwd() to return '%s' but actually did '%s'", expected, actual.String())
+	}
+}
+
 // Note:
 // Only tests a representative case because it passes to functions defined in path/filepath package.
 

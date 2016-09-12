@@ -68,6 +68,9 @@ a, err = abspath.FromSlash("/absoltue/path")
 
 // Similar to ExpandFrom().  But all slashes will be replaced with a file sperator.
 a, err = abspath.ExpandFromSlash("relative/path")
+
+// Shortcut of os.Getwd() for AbsPath.
+a, err = abspath.Getwd()
 ```
 
 ### Operate The Path
