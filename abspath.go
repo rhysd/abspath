@@ -126,7 +126,14 @@ func (a AbsPath) Ext() string {
 //
 // Ref: https://golang.org/pkg/path/filepath/#Join
 func (a AbsPath) Join(elem ...string) AbsPath {
-	return AbsPath{filepath.Join(a.underlying, filepath.Join(elem...))}
+	switch len(elem) {
+	case 0:
+		return a
+	case 1:
+		return AbsPath{filepath.Join(a.underlying, elem[0])}
+	default:
+		return AbsPath{filepath.Join(a.underlying, filepath.Join(elem...))}
+	}
 }
 
 // Equivalent to `filepath.Match()`.

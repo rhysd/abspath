@@ -197,6 +197,20 @@ func TestJoin(t *testing.T) {
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
 	}
+
+	c := a.Join()
+	actual = c.String()
+	expected = filepath.Join(filepath.FromSlash("/foo/bar"))
+	if actual != expected {
+		t.Errorf("Expected %s but actually %s", expected, actual)
+	}
+
+	d := a.Join("piyo")
+	actual = d.String()
+	expected = filepath.Join(filepath.FromSlash("/foo/bar"), "piyo")
+	if actual != expected {
+		t.Errorf("Expected %s but actually %s", expected, actual)
+	}
 }
 
 func TestMatch(t *testing.T) {
