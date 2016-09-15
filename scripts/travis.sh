@@ -11,7 +11,7 @@ else
     go get github.com/axw/gocov/gocov
     go get github.com/mattn/goveralls
     go get github.com/golang/lint/golint
-    if ! go get code.google.com/p/go.tools/cmd/cover > /dev/null ;then go get golang.org/x/tools/cmd/cover; fi
+    go get golang.org/x/tools/cmd/cover
     go get -t -d -v ./...
     golint
     go vet
