@@ -210,7 +210,7 @@ func TestHasPrefix(t *testing.T) {
 	actual := a.HasPrefix(b)
 	expected := filepath.HasPrefix(filepath.FromSlash("/foo/bar.poyo"), b)
 	if actual != expected {
-		t.Errorf("Expected %s but actually %s", expected, actual)
+		t.Errorf("Expected %v but actually %v", expected, actual)
 	}
 }
 
