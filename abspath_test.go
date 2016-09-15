@@ -197,8 +197,18 @@ func TestEvalSymlinks(t *testing.T) {
 func TestExt(t *testing.T) {
 	a, _ := FromSlash("/foo/bar.poyo")
 	b := a.Ext()
-	actual := string(b)
+	actual := b
 	expected := filepath.Ext(filepath.FromSlash("/foo/bar.poyo"))
+	if actual != expected {
+		t.Errorf("Expected %s but actually %s", expected, actual)
+	}
+}
+
+func TestHasPrefix(t *testing.T) {
+	a, _ := FromSlash("/foo/bar.poyo")
+	b := filepath.FromSlash("/foo")
+	actual := a.HasPrefix(b)
+	expected := filepath.HasPrefix(filepath.FromSlash("/foo/bar.poyo"), b)
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
 	}

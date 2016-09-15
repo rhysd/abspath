@@ -137,6 +137,13 @@ func (a AbsPath) Ext() string {
 	return filepath.Ext(a.underlying)
 }
 
+// HasPrefix is equivalent to filepath.HasPrefix().
+//
+// Ref: https://golang.org/pkg/path/filepath/#HasPrefix
+func (a AbsPath) HasPrefix(prefix string) bool {
+	return filepath.HasPrefix(a.underlying, prefix)
+}
+
 // Join is equivalent to filepath.Join().  Parameters are joined into the absolute path.
 //
 // Ref: https://golang.org/pkg/path/filepath/#Join
@@ -151,7 +158,7 @@ func (a AbsPath) Join(elem ...string) AbsPath {
 	}
 }
 
-// Match is equivalent to filepath.Match().
+// Match is equivalent to filepath.Match().  It returns the absolute path matches the given pattern.
 //
 // Ref: https://golang.org/pkg/path/filepath/#Match
 func (a AbsPath) Match(pattern string) (bool, error) {
