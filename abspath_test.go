@@ -455,7 +455,7 @@ func BenchmarkLongPath(b *testing.B) {
 	})
 }
 
-func Example(t *testing.T) {
+func Example() {
 	var a AbsPath
 	var err error
 
