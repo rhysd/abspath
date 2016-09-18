@@ -19,7 +19,7 @@ type NotAbsolutePathError struct {
 }
 
 func (err *NotAbsolutePathError) Error() string {
-	return fmt.Sprintf("Not an absolute path: %s", err.specified)
+	return fmt.Sprintf("Not an absolute path: '%s'", err.specified)
 }
 
 // New creates AbsPath struct instance from a string.  A parameter must represent an absolute path.
@@ -50,7 +50,7 @@ func ExpandFrom(specified string) (AbsPath, error) {
 	}
 
 	if specified == "" {
-		return AbsPath{""}, fmt.Errorf("Empty path cannot be expanded")
+		return AbsPath{""}, &NotAbsolutePathError{""}
 	}
 
 	if specified[0] == '~' {
