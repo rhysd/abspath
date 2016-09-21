@@ -86,16 +86,6 @@ fmt.Printf("%s\n", a.Base())
 fmt.Printf("%s\n", a.HasPrefix("/absolute"))
 ```
 
-In addition, there is a helper to check the path exists.
-
-```go
-a, _ := abspath.ExpandFrom("some_file")
-
-a.Exists()  // true
-a.IsFile()  // true
-a.IsDir()   // false
-```
-
 Please see [GoDoc](https://godoc.org/github.com/rhysd/abspath) for full documentation.
 
 ### Convert to `string`

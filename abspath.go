@@ -209,27 +209,3 @@ func (a AbsPath) Walk(walkFn filepath.WalkFunc) error {
 func (a AbsPath) String() string {
 	return a.underlying
 }
-
-// Exists returns true if the absolute path entry exists.
-func (a AbsPath) Exists() bool {
-	_, err := os.Stat(a.underlying)
-	return err == nil
-}
-
-// IsDir returns true if the absolute path entry exists and is a directory.
-func (a AbsPath) IsDir() bool {
-	s, err := os.Stat(a.underlying)
-	if err != nil {
-		return false
-	}
-	return s.IsDir()
-}
-
-// IsFile returns true if the absolute path entry exists and is a file.
-func (a AbsPath) IsFile() bool {
-	s, err := os.Stat(a.underlying)
-	if err != nil {
-		return false
-	}
-	return !s.IsDir()
-}
