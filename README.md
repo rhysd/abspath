@@ -71,6 +71,9 @@ a, err = abspath.ExpandFromSlash("relative/path")
 
 // Shortcut of os.Getwd() for AbsPath.
 a, err = abspath.Getwd()
+
+// Shortcut for getting an absolute path to home directory.
+a, err = abspath.HomeDir()
 ```
 
 ### Operate The Path

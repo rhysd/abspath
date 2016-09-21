@@ -86,10 +86,10 @@ func ExpandFromSlash(s string) (AbsPath, error) {
 	return ExpandFrom(filepath.FromSlash(s))
 }
 
-// Getwd creates `AbsPath` for the working directory.  This is similar to `os.Getwd()` but returns `AbsPath` instead of string.
+// Getwd creates AbsPath for the working directory.  This is similar to os.Getwd() but returns AbsPath instead of string.
 //
 // Example:
-//	cwd, err := os.Getwd()
+//	cwd, err := abspath.Getwd()
 //	if err != nil {
 //		panic(err)
 //	}
@@ -99,6 +99,22 @@ func Getwd() (AbsPath, error) {
 		return AbsPath{""}, nil
 	}
 	return New(cwd)
+}
+
+// HomeDir creates AbsPath instance for the home directory.  If home directory cannot be obtained or is not an absolute path, it will return an error.
+//
+// Example:
+//	home, err := abspath.HomeDir()
+//	if err != nil {
+//		panic(err)
+//	}
+//	println(home.String())
+func HomeDir() (AbsPath, error) {
+	u, err := user.Current()
+	if err != nil {
+		return AbsPath{""}, err
+	}
+	return New(u.HomeDir)
 }
 
 // Base is equivalent to filepath.Base().

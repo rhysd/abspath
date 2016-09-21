@@ -152,6 +152,22 @@ func TestGetwd(t *testing.T) {
 	}
 }
 
+func TestHomeDir(t *testing.T) {
+	u, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+
+	h, err := HomeDir()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if h.String() != u.HomeDir {
+		t.Fatalf("'%s' is expected as home directory, but actually '%s'", u.HomeDir, h.String())
+	}
+}
+
 // Note:
 // Only tests a representative case because it passes to functions defined in path/filepath package.
 
