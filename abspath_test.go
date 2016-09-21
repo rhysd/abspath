@@ -447,4 +447,15 @@ func Example() {
 		panic(err)
 	}
 	fmt.Println(a.String())
+
+	// Check the path exists/is file/is directory.
+	if _, err := os.Stat(a.String()); err == nil {
+		fmt.Printf("'%s' exists", a.String())
+	}
+	if s, err := os.Stat(a.String()); err == nil && s.IsDir() {
+		fmt.Printf("'%s' is a directory", a.String())
+	}
+	if s, err := os.Stat(a.String()); err == nil && !s.IsDir() {
+		fmt.Printf("'%s' is a file", a.String())
+	}
 }
