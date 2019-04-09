@@ -42,8 +42,8 @@ func New(from string) (AbsPath, error) {
 //
 // Example
 //	a, err := abspath.ExpandFrom("/path/to/file")
-//	b, err := abspath.EpandFrom("relative_path")
-//	c, err := abspath.EpandFrom("~/Documents")
+//	b, err := abspath.ExpandFrom("relative_path")
+//	c, err := abspath.ExpandFrom("~/Documents")
 func ExpandFrom(specified string) (AbsPath, error) {
 	if filepath.IsAbs(specified) {
 		return AbsPath{filepath.Clean(specified)}, nil
