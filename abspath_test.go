@@ -206,6 +206,9 @@ func TestDir(t *testing.T) {
 }
 
 func TestEvalSymlinks(t *testing.T) {
+	if isWindows {
+		t.Skip("Symlink in Git repo is actually not symbolic link on Windows")
+	}
 	a, _ := ExpandFromSlash("testdata/sym-link")
 	b, err := a.EvalSymlinks()
 	if err != nil {
