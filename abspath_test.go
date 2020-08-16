@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -14,7 +15,17 @@ type TestCase struct {
 	expected string
 }
 
+const isWindows bool = runtime.GOOS == "windows"
+
 func tc(i, e string) TestCase {
+	if isWindows {
+		if len(i) > 0 && i[0] == '/' {
+			i = "C:" + i
+		}
+		if len(e) > 0 && e[0] == '/' {
+			e = "C:" + e
+		}
+	}
 	return TestCase{filepath.FromSlash(i), filepath.FromSlash(e)}
 }
 
