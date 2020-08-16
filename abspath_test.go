@@ -17,16 +17,17 @@ type TestCase struct {
 
 const isWindows bool = runtime.GOOS == "windows"
 
-func tc(i, e string) TestCase {
+func fixAbsPath(s string) string {
 	if isWindows {
-		if len(i) > 0 && i[0] == '/' {
-			i = "C:" + i
-		}
-		if len(e) > 0 && e[0] == '/' {
-			e = "C:" + e
+		if len(s) > 0 && s[0] == '/' {
+			s = "C:" + s
 		}
 	}
-	return TestCase{filepath.FromSlash(i), filepath.FromSlash(e)}
+	return s
+}
+
+func tc(i, e string) TestCase {
+	return TestCase{filepath.FromSlash(fixAbsPath(i)), filepath.FromSlash(fixAbsPath(e))}
 }
 
 func TestNew(t *testing.T) {
@@ -183,20 +184,20 @@ func TestHomeDir(t *testing.T) {
 // Only tests a representative case because it passes to functions defined in path/filepath package.
 
 func TestBase(t *testing.T) {
-	a, _ := FromSlash("/foo/bar.poyo")
+	a, _ := FromSlash(fixAbsPath("/foo/bar.poyo"))
 	b := a.Base()
 	actual := b.String()
-	expected := filepath.Base(filepath.FromSlash("/foo/bar.poyo"))
+	expected := filepath.Base(filepath.FromSlash(fixAbsPath("/foo/bar.poyo")))
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
 	}
 }
 
 func TestDir(t *testing.T) {
-	a, _ := FromSlash("/foo/bar")
+	a, _ := FromSlash(fixAbsPath("/foo/bar"))
 	b := a.Dir()
 	actual := b.String()
-	expected := filepath.Dir(filepath.FromSlash("/foo/bar"))
+	expected := filepath.Dir(filepath.FromSlash(fixAbsPath("/foo/bar")))
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
 	}
@@ -214,7 +215,7 @@ func TestEvalSymlinks(t *testing.T) {
 		t.Errorf("Expected %s but actually %s", expected, actual)
 	}
 
-	c, _ := FromSlash("/foo/bar")
+	c, _ := FromSlash(fixAbsPath("/foo/bar"))
 	_, err = c.EvalSymlinks()
 	if err == nil {
 		t.Errorf("Not existing file path must cause an error!")
@@ -222,52 +223,52 @@ func TestEvalSymlinks(t *testing.T) {
 }
 
 func TestExt(t *testing.T) {
-	a, _ := FromSlash("/foo/bar.poyo")
+	a, _ := FromSlash(fixAbsPath("/foo/bar.poyo"))
 	b := a.Ext()
 	actual := b
-	expected := filepath.Ext(filepath.FromSlash("/foo/bar.poyo"))
+	expected := filepath.Ext(filepath.FromSlash(fixAbsPath("/foo/bar.poyo")))
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
 	}
 }
 
 func TestHasPrefix(t *testing.T) {
-	a, _ := FromSlash("/foo/bar.poyo")
-	b := filepath.FromSlash("/foo")
+	a, _ := FromSlash(fixAbsPath("/foo/bar.poyo"))
+	b := filepath.FromSlash(fixAbsPath("/foo"))
 	actual := a.HasPrefix(b)
-	expected := filepath.HasPrefix(filepath.FromSlash("/foo/bar.poyo"), b)
+	expected := filepath.HasPrefix(filepath.FromSlash(fixAbsPath("/foo/bar.poyo")), b)
 	if actual != expected {
 		t.Errorf("Expected %v but actually %v", expected, actual)
 	}
 }
 
 func TestJoin(t *testing.T) {
-	a, _ := FromSlash("/foo/bar")
+	a, _ := FromSlash(fixAbsPath("/foo/bar"))
 	b := a.Join("tsurai", "darui")
 	actual := b.String()
-	expected := filepath.Join(filepath.FromSlash("/foo/bar"), "tsurai", "darui")
+	expected := filepath.Join(filepath.FromSlash(fixAbsPath("/foo/bar")), "tsurai", "darui")
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
 	}
 
 	c := a.Join()
 	actual = c.String()
-	expected = filepath.Join(filepath.FromSlash("/foo/bar"))
+	expected = filepath.Join(filepath.FromSlash(fixAbsPath("/foo/bar")))
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
 	}
 
 	d := a.Join("piyo")
 	actual = d.String()
-	expected = filepath.Join(filepath.FromSlash("/foo/bar"), "piyo")
+	expected = filepath.Join(filepath.FromSlash(fixAbsPath("/foo/bar")), "piyo")
 	if actual != expected {
 		t.Errorf("Expected %s but actually %s", expected, actual)
 	}
 }
 
 func TestMatch(t *testing.T) {
-	a, _ := FromSlash("/foo/bar")
-	b, err := a.Match(filepath.FromSlash("/*/*"))
+	a, _ := FromSlash(fixAbsPath("/foo/bar"))
+	b, err := a.Match(filepath.FromSlash(fixAbsPath("/*/*")))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -277,21 +278,21 @@ func TestMatch(t *testing.T) {
 }
 
 func TestRel(t *testing.T) {
-	a, _ := FromSlash("/a")
-	s, err := a.Rel(filepath.FromSlash("/b/c"))
+	a, _ := FromSlash(fixAbsPath("/a"))
+	s, err := a.Rel(filepath.FromSlash(fixAbsPath("/b/c")))
 	if err != nil {
 		t.Fatal(err)
 	}
-	expected, _ := filepath.Rel(filepath.FromSlash("/a"), filepath.FromSlash("/b/c"))
+	expected, _ := filepath.Rel(filepath.FromSlash(fixAbsPath("/a")), filepath.FromSlash(fixAbsPath("/b/c")))
 	if s != expected {
 		t.Errorf("Expected %s but actually %s", expected, s)
 	}
 }
 
 func TestSplit(t *testing.T) {
-	a, _ := FromSlash("/foo/bar.poyo")
+	a, _ := FromSlash(fixAbsPath("/foo/bar.poyo"))
 	d, f := a.Split()
-	d2, f2 := filepath.Split(filepath.FromSlash("/foo/bar.poyo"))
+	d2, f2 := filepath.Split(filepath.FromSlash(fixAbsPath("/foo/bar.poyo")))
 	if d.String() != d2 {
 		t.Errorf("Expected %s but actually %s", d2, d)
 	}
@@ -301,9 +302,9 @@ func TestSplit(t *testing.T) {
 }
 
 func TestToSlash(t *testing.T) {
-	a, _ := FromSlash("/foo/bar.poyo")
+	a, _ := FromSlash(fixAbsPath("/foo/bar.poyo"))
 	s := a.ToSlash()
-	expected := filepath.Clean(filepath.FromSlash("/foo/bar.poyo"))
+	expected := filepath.Clean(filepath.FromSlash(fixAbsPath("/foo/bar.poyo")))
 	if s != expected {
 		t.Errorf("Expected %s but actually %s", expected, s)
 	}
@@ -331,14 +332,14 @@ func TestWalk(t *testing.T) {
 }
 
 func TestEquals(t *testing.T) {
-	a, _ := FromSlash("/foo/bar")
-	b, _ := FromSlash("/foo/bar")
+	a, _ := FromSlash(fixAbsPath("/foo/bar"))
+	b, _ := FromSlash(fixAbsPath("/foo/bar"))
 	if a != b {
 		t.Errorf("Expected '%s' == '%s'", a, b)
 	}
 
-	c, _ := FromSlash("/foo/bar")
-	d, _ := FromSlash("/piyo/poyo")
+	c, _ := FromSlash(fixAbsPath("/foo/bar"))
+	d, _ := FromSlash(fixAbsPath("/piyo/poyo"))
 	if c == d {
 		t.Errorf("Expected '%s' != '%s'", c, d)
 	}
@@ -353,7 +354,7 @@ func funcPassByRef(a *AbsPath) string {
 }
 
 func BenchmarkPassBy(b *testing.B) {
-	a, _ := FromSlash("/path/to/entry")
+	a, _ := FromSlash(fixAbsPath("/path/to/entry"))
 
 	b.Run("Pass by value", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
