@@ -306,7 +306,7 @@ func TestSplit(t *testing.T) {
 func TestToSlash(t *testing.T) {
 	a, _ := FromSlash(fixAbsPath("/foo/bar.poyo"))
 	s := a.ToSlash()
-	expected := filepath.Clean(filepath.FromSlash(fixAbsPath("/foo/bar.poyo")))
+	expected := fixAbsPath("/foo/bar.poyo")
 	if s != expected {
 		t.Errorf("Expected %s but actually %s", expected, s)
 	}
