@@ -20,7 +20,7 @@ const isWindows bool = runtime.GOOS == "windows"
 func fixAbsPath(s string) string {
 	if isWindows {
 		if len(s) > 0 && s[0] == '/' {
-			s = "C:" + s
+			s = "c:" + s
 		}
 	}
 	return s
@@ -105,17 +105,19 @@ func TestExpandFrom(t *testing.T) {
 }
 
 func TestFromSlash(t *testing.T) {
-	for _, c := range []TestCase{
-		{"/path/to/file", filepath.Clean(filepath.FromSlash("/path/to/file"))},
-		{"/path////to//file/", filepath.Clean(filepath.FromSlash("/path////to//file/"))},
+	for _, input := range []string{
+		"/path/to/file",
+		"/path////to//file/",
 	} {
-		a, err := FromSlash(c.input)
+		i := fixAbsPath(input)
+		e := filepath.Clean(filepath.FromSlash(i))
+		a, err := FromSlash(i)
 		if err != nil {
 			t.Error(err)
 			continue
 		}
-		if a.String() != c.expected {
-			t.Errorf("Expected %s but actually %s", c.expected, a)
+		if a.String() != e {
+			t.Errorf("Expected %s but actually %s", e, a)
 		}
 	}
 
