@@ -18,3 +18,13 @@ jobs:
       - run: go test -v -race '-coverprofile=coverage.txt' -covermode=atomic ./...
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v1
+  lint:
+    name: Run golint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v1
+      - run: go get golang.org/x/lint/golint
+      - name: Add $GOPATH/bin to $PATH
+        run: echo "::add-path::$(go env GOPATH)/bin"
+      - run: golint -set_exit_status
